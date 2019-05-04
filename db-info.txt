@@ -1,0 +1,43 @@
+DB info:
+
+CREATE TABLE drinkSales (
+  saleId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  drinkName VARCHAR(100) NOT NULL,
+  timestamp DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  FOREIGN KEY(drinkName) REFERENCES drinkConfig(drinkName)
+);
+
+CREATE TABLE drinkConfig(
+  drinkName VARCHAR(255) PRIMARY KEY NOT NULL,
+  liquor1 INTEGER,
+  liquor2 INTEGER,
+  soda1 INTEGER,
+  cost DECIMAL(2, 2) NOT NULL
+);
+
+INSERT INTO drinkConfig(drinkName, liquor1, liquor2, soda1, cost)
+VALUES('Whiskey and Coke', 'Knob Creek', '', 'Diet Coke', '4.99');
+
+INSERT INTO drinkConfig(drinkName, liquor1, liquor2, soda1, cost)
+VALUES('Vodka Soda', 'Ciroc', '', 'Club Soda', '7.99');
+
+INSERT INTO drinkSales(drinkName)
+VALUES('Whiskey and Coke');
+
+INSERT INTO drinkSales(drinkName)
+VALUES('Vodka Soda');
+
+SELECT SUM(dc.cost)
+FROM drinkSales AS ds, drinkConfig AS dc
+WHERE ds.drinkName = dc.drinkName;
+
+SELECT SUM(dc.cost) 
+FROM drinkSales AS ds, drinkConfig AS dc 
+WHERE ds.drinkName = dc.drinkName 
+AND timestamp BETWEEN '2018-10-28' AND '2018-10-29';
+
+*****onRemoveDrink: determine how cost should be stored, so that removing a drink doesn't interfere with calculating profit
+
+
+drinkSales(drinkId, timestamp, drinkName)
+drinkConfig(drinkName, liquor1, liquor2, soda1, cost)
